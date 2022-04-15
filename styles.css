@@ -1,0 +1,112 @@
+
+/*This portion is for the Body*/
+body {
+    font-family: Arial;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: flex-start;
+    background: linear-gradient(0deg, rgb(39, 19, 61) 0%, rgb(202, 202, 202) 63%);
+} /*End Body*/
+
+/*This portion is for the Header*/
+header {
+    padding: 32px;
+    text-align: center;
+    background: #170336;
+    color: #fff;
+    border-bottom:30px #879274;
+}
+
+.large-font {
+    font-size: 2.5em;
+    text-align:center;
+} /*End Header*/
+
+/*This portion primarily focuses on the buttons*/
+.Reset-Btn {
+    font-size: 16px;
+    height: 30px;
+    line-height: 8px;
+    margin-top: 20px;
+}
+
+button {
+    background: radial-gradient(circle, rgb(255, 255, 255) 0%,rgba(115, 61, 240, 0.954) 100%);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 2em;
+    letter-spacing: 0.21px;
+    line-height: 16px;
+    max-width: 255px;
+    padding: 20px 52px;
+    margin-top: 0.4em;
+  } /*End of buttons*/
+
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  section {
+    flex: 0 auto;
+    padding: 8px;
+    margin-top: 50px;
+  }
+
+  .timer {
+    height: 240px;
+    padding: 10px;
+    background: radial-gradient(circle, #6f42aa 0%, #ffffff 100%);
+    border: 1px solid;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .timer-text {
+    padding: 55px;
+  }
+
+  .Multiple-Choices {
+    line-height: 360px;
+  }
+
+  .box {
+    border-radius: 8px;
+    margin: auto;
+    padding: 20px;
+  }
+
+
+  /*This portion is for adjustment of different screen size*/
+  @media screen and (max-width: 1183px) {
+    main {
+      flex-direction: column;
+    }
+  
+    .word-guess,
+    .results {
+      width: 90vw;
+    }
+  
+    section {
+      background-color: white;
+      margin: 20px auto;
+      width: 92vw;
+    }
+  }
+  
+  @media screen and (max-width: 504px) {
+    .large-font {
+      font-size: 2em;
+    }
+  
+    .reset-button {
+      font-size: 12px;
+      width: 20ox;
+      
+    }
+  
+} /*End of screen size adjustment*/
