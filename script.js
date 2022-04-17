@@ -112,7 +112,9 @@ function setGameTimer() {
   timer = 60;
   let everySecond = setInterval(function () {
     timer--;
+    //The if statement makes it so that when the timer reaches 0 seconds or all the questions are answered, it will jump to the submit name function
     timeArea.textContent = timer + ' seconds remaining!';
+    //Since the decreases by 10 seconds and theres only 60 seconds, the timer <= 0 is there so that the timer will not drop into the negatives and stops the timer.
     if (timer <= 0 || stopTimer == true) {
       clearInterval(everySecond);
       timeArea.textContent = "Time's Up!";
@@ -126,7 +128,7 @@ function setGameTimer() {
       <button class="submitName" type="Submit">Submit</button>
 `;
     }
-    //counts down by 1 sec which is 1000millisecond
+    //counts down by 1 second which is 1000 millisecond
   }, 1000)
     ;
 }
@@ -207,7 +209,6 @@ if (element.matches(".goBackButton")) {
 }
 });
 
-
   //After the game is over, everything needs to be reset in order for everything to start from the beginning
   function refresh() {
     stopTimer = false;
@@ -228,7 +229,7 @@ if (element.matches(".goBackButton")) {
         ;
     })
 
-    //gets array back
+    //This will show the High scores after the user inputs their name and clicks submit.
     console.log(getHighScoresBack);
     let htmlTemplate = "<h1>High Scores</h1>";
     for (let player of getHighScoresBack) {
