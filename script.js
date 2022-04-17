@@ -109,14 +109,13 @@ setGameTimer();
 
 //This sets the timer, along with lets the user know when time is up.
 function setGameTimer() {
-  timer = 15;
+  timer = 60;
   let everySecond = setInterval(function () {
     timer--;
     timeArea.textContent = timer + ' seconds remaining!';
     if (timer <= 0 || stopTimer == true) {
       clearInterval(everySecond);
       timeArea.textContent = "Time's Up!";
-      timer = 0;
       console.log(0);
       stopTimer = true;
       console.log("GAME OVER");
@@ -164,7 +163,7 @@ view.addEventListener("click", function (event) {
       stopTimer = true;
       console.log("GAME OVER");
       finalScore = timer;
-      view.innerHTML = `<h1>You're Done! Your score is: ${finalScore}</h1> Enter your name
+      view.innerHTML = `<h3>You're Done! Your score is: ${finalScore}</h3> Enter your name
       <label for="fname"></label><br>
       <input type="text" id="fname" name="fname"><br>
       <button class="submitName" type="Submit">Submit</button>
