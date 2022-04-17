@@ -2,7 +2,6 @@ var startBtn = document.querySelector("#start");
 //This event listener allows the user to press the start button to initiate the quiz.
 startBtn.addEventListener("click", startGame);
 var restartBtn = document.querySelector("#restart");
-var viewHighScore = document.querySelector("#viewHighScore");
 var timeArea = document.querySelector("#time");
 var view = document.querySelector("#view");
 
@@ -58,25 +57,9 @@ const questionBank = [
         "Jojo No Kimeyou Na Bouken",
         "Omae wa Mo Shinderu, NANI!"],
     correctAns: "Jojo No Kimeyou Na Bouken",
-}]
+  }]
 
-//Once the user presses the start button, we want to remove the buttons from the screen, start the timer, and display the questions.
-function startGame() {
-stopTimer = false;
-finalScore = 0;
-timer = 0;
-questionQueue = [];
-currentQuestion = {};
-hideBtn();
-setGameTimer();
-  for (let question of questionBank) {
-    questionQueue.push(question)
-  ;}  
-  currentQuestion = questionQueue[0];
-  initiateGameBoard()
-;}
-
-//This function allows the questions to appear after the start button is clicked.
+  //This function allows the questions to appear after the start button is clicked.
 function initiateGameBoard() {
   //pull from questions array - display questions
   //pull answers from the same array + append each answer.
@@ -93,7 +76,62 @@ function initiateGameBoard() {
 
   `;
   view.innerHTML = htmlTemplate
-;}
+    ;
+}
+
+ //In the event that the user has the order of the questions and answers, this function swaps the order of everything.
+ function shuffleAnswers(anArray) {
+  for (let i = anArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    //swap array i and array j
+    [anArray[i], anArray[j]] = [anArray[j], anArray[i]];
+  }
+  return anArray
+    ;
+}
+
+//Once the user presses the start button, we want to remove the buttons from the screen, start the timer, and display the questions.
+function startGame() {
+stopTimer = false;
+finalScore = 0;
+timer = 0;
+questionQueue = [];
+currentQuestion = {};
+hideBtn();
+setGameTimer();
+  for (let question of questionBank) {
+    questionQueue.push(question)
+  ;}  
+  currentQuestion = questionQueue[0];
+  initiateGameBoard();
+  
+}
+
+//This sets the timer, along with lets the user know when time is up.
+function setGameTimer() {
+  timer = 15;
+  let everySecond = setInterval(function () {
+    timer--;
+    timeArea.textContent = timer + ' seconds remaining!';
+    if (timer <= 0 || stopTimer == true) {
+      clearInterval(everySecond);
+      timeArea.textContent = "Time's Up!";
+      timer = 0;
+      console.log(0);
+      stopTimer = true;
+      console.log("GAME OVER");
+      finalScore = timer;
+      view.innerHTML = `<h1>You're Done! Your score is: ${finalScore}</h1> Enter your name
+      <label for="fname"></label><br>
+      <input type="text" id="fname" name="fname"><br>
+      <button class="submitName" type="Submit">Submit</button>
+`;
+    }
+    //counts down by 1 sec which is 1000millisecond
+  }, 1000)
+    ;
+}
+
 
 //As the user clicks an answer, this event listener will let the user know in the console if they were right or wrong.
 view.addEventListener("click", function (event) {
@@ -112,75 +150,6 @@ view.addEventListener("click", function (event) {
       timer = timer - 10;
     }
     showNextQuestion();
-  }
-
-
-  //This portion allows the user to input their name, this will display their name and final score.
-  if (element.matches(".submitName")) {
-    var userID = document.querySelector("#fname").value;
-    console.log(userID);
-    //userRecord is the array that will display the userID & finalScore.
-    let userRecord = [userID, finalScore];
-    // Checks if there is a "key"/data of "Records" then it will return that data
-    // If NOT, it will return an empty array
-    // "Records" is a key value, the array is the value, this displays in the application section of the inspect element.
-    let localRecords = JSON.parse(localStorage.getItem("Records")) || [];
-    // Push the new player into the local Records array
-    localRecords.push(userRecord);
-    // Store it back into local storage
-    localStorage.setItem("Records", JSON.stringify(localRecords));
-    displayScores()
-      ;
-  }
-
-  //This portion will help reset all the questions, variables, and queue.
-if (element.matches(".goBackButton")) {
-  view.innerHTML = "";
-  unHideBtn();
-  refresh()
-    ;
-}
-});
-
-  //this is the actual function that will display the start/restart/high score buttons.
-  function unHideBtn() {
-    startBtn.style.display = "block";
-    restartBtn.style.display = "block";
-    addHighScore.style.display = "block"
-      ;
-  }
-
-  //After the game is over, everything needs to be reset in order for everything to start from the beginning
-  function refresh() {
-    stopTimer = false;
-    finalScore = 0;
-    timer = 0;
-    questionQueue = [];
-    currentQuestion = {}
-      ;
-  }
-
-  //This displays the High Scores, if user checks the application in the inspect element, they will be able to see the key and value
-  function displayScores() {
-    let getHighSCoresBack = JSON.parse(localStorage.getItem("Records")) || [];
-    //compare the scores, score is the 2nd value of user array and
-    //structure returned is an array within an array.
-    getHighSCoresBack.sort(function (a, b) {
-      return b[1] - a[1]
-        ;
-    })
-
-    //gets array back
-    console.log(getHighScoresBack);
-    let htmlTemplate = "<h1>$High Scores</h1>";
-    for (let player of getHighSCoresBack) {
-      htmlTemplate += `<p>${player[0]} Score ${player[1]}</p>`
-        ;
-    }
-
-    htmlTemplate += `<button class="goBackButton">Go Back</button>`;
-    view.innerHTML = htmlTemplate
-      ;
   }
 
   //As the user continues through the questions, this function allows the user to see the next question.
@@ -212,37 +181,76 @@ if (element.matches(".goBackButton")) {
     }
   }
 
-  //In the event that the user has the order of the questions and answers, this function swaps the order of everything.
-  function shuffleAnswers(anArray) {
-    for (let i = anArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      //swap array i and array j
-      [anArray[i], anArray[j]] = [anArray[j], anArray[i]];
-    }
-    return anArray
+  //This portion allows the user to input their name, this will display their name and final score.
+  if (element.matches(".submitName")) {
+    var userID = document.querySelector("#fname").value;
+    console.log(userID);
+    //userRecord is the array that will display the userID & finalScore.
+    let userRecord = [userID, finalScore];
+    // Checks if there is a "key"/data of "Records" then it will return that data
+    // If NOT, it will return an empty array
+    // "Records" is a key value, the array is the value, this displays in the application section of the inspect element.
+    let localRecords = JSON.parse(localStorage.getItem("Records")) || [];
+    // Push the new player into the local Records array
+    localRecords.push(userRecord);
+    // Store it back into local storage
+    localStorage.setItem("Records", JSON.stringify(localRecords));
+    displayScores()
       ;
   }
 
-  //This sets the timer, along with lets the user know when time is up.
-  function setGameTimer() {
-    timer = 120;
-    let everySecond = setInterval(function () {
-      timer--;
-      timeArea.textContent = timer + ' seconds remaining!';
-      if (timer === 0 || stopTimer == true) {
-        clearInterval(everySecond);
-        timeArea.textContent = "Time's Up!";
-        timer = 0;
-        console.log(0);
-      }
-      //counts down by 1 sec which is 1000millisecond
-    }, 1000)
+  //This portion will help reset all the questions, variables, and queue.
+if (element.matches(".goBackButton")) {
+  view.innerHTML = "";
+  unHideBtn();
+  refresh()
+    ;
+}
+});
+
+
+  //After the game is over, everything needs to be reset in order for everything to start from the beginning
+  function refresh() {
+    stopTimer = false;
+    finalScore = 0;
+    timer = 0;
+    questionQueue = [];
+    currentQuestion = {}
+      ;
+  }
+
+  //This displays the High Scores, if user checks the application in the inspect element, they will be able to see the key and value
+  function displayScores() {
+    let getHighScoresBack = JSON.parse(localStorage.getItem("Records")) || [];
+    //compare the scores, score is the 2nd value of user array and
+    //structure returned is an array within an array.
+    getHighScoresBack.sort(function (a, b) {
+      return b[1] - a[1]
+        ;
+    })
+
+    //gets array back
+    console.log(getHighScoresBack);
+    let htmlTemplate = "<h1>High Scores</h1>";
+    for (let player of getHighScoresBack) {
+      htmlTemplate += `<p>${player[0]} Score ${player[1]}</p>`
+        ;
+    }
+
+    htmlTemplate += `<button class="goBackButton">Go Back</button>`;
+    view.innerHTML = htmlTemplate
       ;
   }
 
   //This function hides the buttons when the function is called.
   function hideBtn() {
     restartBtn.style.display = "none";
-    viewHighScore.style.display = "none";
     startBtn.style.display = "none";
+}
+
+  //this is the actual function that will display the start/restart/high score buttons.
+  function unHideBtn() {
+    startBtn.style.display = "block";
+    restartBtn.style.display = "block";
+      ;
   }
